@@ -15,6 +15,9 @@ SPIDER_MODULES = ['detectorists.spiders']
 NEWSPIDER_MODULE = 'detectorists.spiders'
 
 
+# annoying S3 bug
+DOWNLOAD_HANDLERS = {'s3': None,}
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'detectorists (+http://www.yourdomain.com)'
 
@@ -24,7 +27,7 @@ NEWSPIDER_MODULE = 'detectorists.spiders'
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY=3
+#DOWNLOAD_DELAY=3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN=16
 #CONCURRENT_REQUESTS_PER_IP=16
@@ -70,11 +73,11 @@ COOKIES_ENABLED=False
 # NOTE: AutoThrottle will honour the standard settings for concurrency and delay
 AUTOTHROTTLE_ENABLED=True
 # The initial download delay
-#AUTOTHROTTLE_START_DELAY=5
+AUTOTHROTTLE_START_DELAY=5
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY=60
+AUTOTHROTTLE_MAX_DELAY=60
 # Enable showing throttling stats for every response received:
-#AUTOTHROTTLE_DEBUG=False
+AUTOTHROTTLE_DEBUG=False
 
 # Enable and configure HTTP caching (disabled by default)
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
