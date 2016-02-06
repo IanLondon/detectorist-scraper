@@ -13,10 +13,16 @@ class DetectoristSpider(scrapy.Spider):
 
             t['user_id'] = post.xpath(".//a[@class='bigusername']/@href").re('u=(\d+)')[0]
             t['timestamp'] = post.xpath("string(.//tr/td/div[@class='normal'][2])").extract()[0].strip()
-            t['message'] = post.xpath(".//*[contains(@id,'post_message_')]/text()").extract()[0]
+            t['message'] = post.xpath(".//*[contains(@id,'post_message_')]/text()").extract()[0].strip()
             t['post_no'] = post.xpath(".//tr/td/div[@class='normal'][1]/a//text()").extract()[0]
 
             yield t
+
+        # Search for the link that the next button '>' points to, if any
+        rel_next_page = response.xpath("//*[@class='pagenav']//*[@href and contains(text(), '>')]/@href").extract()[0]
+
+        next_page = response.urljoin(rel_next_page)
+        print "next page is ", next_page
 
 
 # Post container: use this for each post
