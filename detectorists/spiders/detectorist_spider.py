@@ -12,9 +12,15 @@ class DetectoristSpider(scrapy.Spider):
         for post in response.xpath("//table[contains(@id,'post')]"):
             t = ForumThreadItem()
 
-            t['user_id'] = post.xpath(".//a[@class='bigusername']/@href").re('u=(\d+)')[0]
-            t['timestamp'] = post.xpath("string(.//tr/td/div[@class='normal'][2])").extract()[0].strip()
-            t['message'] = post.xpath(".//*[contains(@id,'post_message_')]//text()").extract()
+            t['user_id'] = post.xpath(".//a[@class='bigusername']/@href").re_first('u=(\d+)')
+            t['timestamp'] = post.xpath("string(.//tr/td/div[@class='normal'][2])").extract_first().strip()
+            t['quotes'] = post.xpath('.//blockquote/text()').extract()
+
+            # Message text, excluding blockquotes
+            # Also excluding the <div> that has user "signatures"
+            # (perhaps later on for NLP you'd want to insert a BLOCKQUOTE word-marker)
+            t['message'] = post.xpath(".//*[contains(@id,'post_message_')]//text()[not(parent::blockquote)]").extract()
+
             t['post_no'] = post.xpath(".//tr/td/div[@class='normal'][1]/a//text()").extract()[0]
 
             yield t
