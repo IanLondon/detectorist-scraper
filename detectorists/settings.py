@@ -14,8 +14,11 @@ BOT_NAME = 'detectorists'
 SPIDER_MODULES = ['detectorists.spiders']
 NEWSPIDER_MODULE = 'detectorists.spiders'
 
+# MongoDB settings
+MONGO_URI = 'mongodb://localhost:27017/'
+MONGO_DATABASE = 'detectorists'
 
-# annoying S3 bug
+# fix annoying S3 error message bug
 DOWNLOAD_HANDLERS = {'s3': None,}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -36,7 +39,7 @@ DOWNLOAD_HANDLERS = {'s3': None,}
 COOKIES_ENABLED=False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED=False
+TELNETCONSOLE_ENABLED=False
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
@@ -64,16 +67,16 @@ COOKIES_ENABLED=False
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'detectorists.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'detectorists.pipelines.MongoPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 # NOTE: AutoThrottle will honour the standard settings for concurrency and delay
 AUTOTHROTTLE_ENABLED=True
 # The initial download delay
-AUTOTHROTTLE_START_DELAY=5
+AUTOTHROTTLE_START_DELAY=4
 # The maximum download delay to be set in case of high latencies
 AUTOTHROTTLE_MAX_DELAY=60
 # Enable showing throttling stats for every response received:

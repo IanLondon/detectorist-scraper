@@ -2,6 +2,8 @@ import scrapy
 
 from detectorists.items import ForumThreadItem
 
+# This is a vBulletin forum, I wonder if all of them have similar XPath selection targets???
+
 class DetectoristSpider(scrapy.Spider):
     name = 'detectorist'
     allowed_domains = ['metaldetectingforum.com']
