@@ -25,8 +25,10 @@ class PostItem(scrapy.Item):
     message = scrapy.Field()
     quotes = scrapy.Field()
     post_no = scrapy.Field()
-    # post_no is '2' in the last part of URL: http://metaldetectingforum.com/showpost.php?p=2499503&postcount=2
     # post_no is shown on upper right of each post container.
+
+    # post_id is '202020' in the last part of URL: http://metaldetectingforum.com/showpost.php?p=202020
+    # But I'm not using post_id right now.
 
 class UserItem(scrapy.Item):
     collection = 'user'
