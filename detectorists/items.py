@@ -7,8 +7,18 @@
 
 import scrapy
 
+# I don't know if it's the best way to do it, but
+# every item must have a collection variable that tells the
+# MongoPipeline where to put in in the mongoDB database.
+
+# unique_fields is used by MongoPipeline to avoid adding duplicates.
+# if & only if ALL unique_fields match an existing document,
+# the current item is not added to the database.
 
 class PostItem(scrapy.Item):
+    collection = 'post'
+    unique_fields = ['thread_id','post_no']
+
     thread_id = scrapy.Field()
     user_id = scrapy.Field()
     timestamp = scrapy.Field()
@@ -19,9 +29,15 @@ class PostItem(scrapy.Item):
     # post_no is shown on upper right of each post container.
 
 class UserItem(scrapy.Item):
+    collection = 'user'
+    unique_fields = ['user_id']
+
     user_id = scrapy.Field()
     user_name = scrapy.Field()
 
 class ThreadItem(scrapy.Item):
+    collection = 'thread'
+    unique_fields = ['thread_id']
+
     thread_id = scrapy.Field()
     thread_name = scrapy.Field()

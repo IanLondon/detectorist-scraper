@@ -11,6 +11,7 @@
 #         return item
 
 import pymongo
+from scrapy.exceptions import DropItem
 from detectorists.items import PostItem, UserItem, ThreadItem
 
 # Adapted from
@@ -18,9 +19,9 @@ from detectorists.items import PostItem, UserItem, ThreadItem
 
 class MongoPipeline(object):
 
-    collection_map = {PostItem:'posts',
-                      UserItem:'users',
-                      ThreadItem: 'threads'}
+    # collection_map = {PostItem:'posts',
+    #                   UserItem:'users',
+    #                   ThreadItem: 'threads'}
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -41,6 +42,16 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        # use the collection_map to determine collection from item
-        self.db[self.collection_map[type(item)]].insert(dict(item))
+        # Make sure items are valid
+        # item.collection and item.unique_fields must exist
+        # TODO
+
+        # Screen for duplicates
+        filter_dict = {key: item[key] for key in item if key in item.unique_fields}
+
+        if self.db[item.collection].count(filter_dict) > 0:
+            raise DropItem("Duplicate item found: %s. Filter was %s" % (item, filter_dict))
+        else:
+            # Not a duplicate, add it
+            self.db[item.collection].insert(dict(item))
         return item
