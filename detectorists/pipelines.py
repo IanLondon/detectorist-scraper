@@ -11,6 +11,7 @@
 #         return item
 
 import pymongo
+import datetime
 from scrapy.exceptions import DropItem
 from detectorists.items import PostItem, UserItem, ThreadItem
 
@@ -42,12 +43,21 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        # first, screen for duplicates
+        # filter based on item's unique fields
         filter_dict = {key: item[key] for key in item if key in item.unique_fields}
 
-        if self.db[item.collection].count(filter_dict) > 0:
-            raise DropItem("Duplicate item found: %s. Filter was %s" % (item, filter_dict))
-        else:
-            # not a duplicate, add it
-            self.db[item.collection].insert(dict(item))
+        # append a "last_modified" datetime field.
+        insert_dict = dict(item)
+        insert_dict.update({"last_modified": datetime.datetime.utcnow()})
+
+        # update or insert (aka "upsert") with the $set field update operator
+        self.db[item.collection].update_one(filter_dict, {'$set':insert_dict}, upsert=True)
+
+        # OLD: This is how to *skip* duplicates
+        #######################################
+        # if self.db[item.collection].count(filter_dict) > 0:
+        #     raise DropItem("Duplicate item found: %s. Filter was %s" % (item, filter_dict))
+        # else:
+        #     # not a duplicate, add it
+        #     self.db[item.collection].insert(insert_dict)
         return item

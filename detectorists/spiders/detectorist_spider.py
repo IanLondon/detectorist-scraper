@@ -17,7 +17,7 @@ class DetectoristSpider(scrapy.Spider):
 
         # Get info about thread
         thread = ThreadItem()
-        thread['thread_id'] = re.findall(self.patterns['thread_id'], response.url)[0]
+        thread['thread_id'] = int(re.findall(self.patterns['thread_id'], response.url)[0])
         thread['thread_name'] = response.xpath('.//meta[@name="twitter:title"]/@content').extract_first()
 
         # Scrape all the posts on a page for post & user info
@@ -25,7 +25,7 @@ class DetectoristSpider(scrapy.Spider):
             p = PostItem()
 
             p['thread_id'] = thread['thread_id']
-            p['user_id'] = post.xpath(".//a[@class='bigusername']/@href").re_first('u=(\d+)')
+            p['user_id'] = int(post.xpath(".//a[@class='bigusername']/@href").re_first('u=(\d+)'))
             p['timestamp'] = post.xpath("string(.//tr/td/div[@class='normal'][2])").extract_first().strip()
             p['quotes'] = post.xpath('.//blockquote/text()').extract()
 
