@@ -39,7 +39,7 @@ class DetectoristSpider(scrapy.Spider):
             # user info
             user = UserItem()
             user['user_id'] = p['user_id']
-            user['user_name'] = post.xpath(".//a[@class='bigusername']/text()").extract_first()
+            user['user_name'] = post.xpath(".//a[@class='bigusername']//text()").extract_first()
 
             yield p
             yield user

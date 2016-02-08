@@ -42,16 +42,12 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        # Make sure items are valid
-        # item.collection and item.unique_fields must exist
-        # TODO
-
-        # Screen for duplicates
+        # first, screen for duplicates
         filter_dict = {key: item[key] for key in item if key in item.unique_fields}
 
         if self.db[item.collection].count(filter_dict) > 0:
             raise DropItem("Duplicate item found: %s. Filter was %s" % (item, filter_dict))
         else:
-            # Not a duplicate, add it
+            # not a duplicate, add it
             self.db[item.collection].insert(dict(item))
         return item
