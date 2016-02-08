@@ -1,5 +1,6 @@
 import scrapy
 import re
+from detectorists.processors import to_int
 from detectorists.items import PostItem, UserItem, ThreadItem
 
 # This is a vBulletin forum, I wonder if all of them have similar XPath selection targets???
@@ -17,7 +18,7 @@ class DetectoristSpider(scrapy.Spider):
 
         # Get info about thread
         thread = ThreadItem()
-        thread['thread_id'] = int(re.findall(self.patterns['thread_id'], response.url)[0])
+        thread['thread_id'] = to_int(re.findall(self.patterns['thread_id'], response.url)[0])
         thread['thread_name'] = response.xpath('.//meta[@name="twitter:title"]/@content').extract_first()
 
         # Scrape all the posts on a page for post & user info
@@ -25,7 +26,7 @@ class DetectoristSpider(scrapy.Spider):
             p = PostItem()
 
             p['thread_id'] = thread['thread_id']
-            p['user_id'] = int(post.xpath(".//a[@class='bigusername']/@href").re_first('u=(\d+)'))
+            p['user_id'] = to_int(post.xpath(".//a[@class='bigusername']/@href").re_first('u=(\d+)'))
             p['timestamp'] = post.xpath("string(.//tr/td/div[@class='normal'][2])").extract_first().strip()
             p['quotes'] = post.xpath('.//blockquote/text()').extract()
 
@@ -34,7 +35,7 @@ class DetectoristSpider(scrapy.Spider):
             # (perhaps later on for NLP you'd want to insert a BLOCKQUOTE word-marker)
             p['message'] = post.xpath(".//*[contains(@id,'post_message_')]//text()[not(parent::blockquote)]").extract()
 
-            p['post_no'] = post.xpath(".//tr/td/div[@class='normal'][1]/a//text()").extract_first()
+            p['post_no'] = to_int(post.xpath(".//tr/td/div[@class='normal'][1]/a//text()").extract_first())
 
             # user info
             user = UserItem()
