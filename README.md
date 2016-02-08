@@ -16,7 +16,7 @@ Every post also has a number, which is its order in the thread. This is what I c
 
     './/td[contains(@id,'f')]/div/a'
 
-You *could* exclude <a>'s with smallfont ancestors b/c they're subforms:
+You *could* exclude `<a>`'s with smallfont ancestors b/c they're subforms:
 
     './/td[contains(@id,'f')]/div/a[not(ancestor::div[@class="smallfont"])]'
 
