@@ -8,7 +8,8 @@
 import scrapy
 
 
-class ForumThreadItem(scrapy.Item):
+class PostItem(scrapy.Item):
+    thread_id = scrapy.Field()
     user_id = scrapy.Field()
     timestamp = scrapy.Field()
     message = scrapy.Field()
@@ -20,3 +21,7 @@ class ForumThreadItem(scrapy.Item):
 class UserItem(scrapy.Item):
     user_id = scrapy.Field()
     user_name = scrapy.Field()
+
+class ThreadItem(scrapy.Item):
+    thread_id = scrapy.Field()
+    thread_name = scrapy.Field()

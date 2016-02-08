@@ -11,13 +11,16 @@
 #         return item
 
 import pymongo
+from detectorists.items import PostItem, UserItem, ThreadItem
 
 # Adapted from
 # http://doc.scrapy.org/en/stable/topics/item-pipeline.html#write-items-to-mongodb
 
 class MongoPipeline(object):
 
-    post_collection = 'posts'
+    collection_map = {PostItem:'posts',
+                      UserItem:'users',
+                      ThreadItem: 'threads'}
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -38,7 +41,6 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        # just process posts for now
-        # TODO: process user items with different collection
-        self.db[self.post_collection].insert(dict(item))
+        # use the collection_map to determine collection from item
+        self.db[self.collection_map[type(item)]].insert(dict(item))
         return item
