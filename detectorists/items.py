@@ -41,3 +41,4 @@ class ThreadItem(scrapy.Item):
 
     thread_id = scrapy.Field()
     thread_name = scrapy.Field()
+    thread_path = scrapy.Field()

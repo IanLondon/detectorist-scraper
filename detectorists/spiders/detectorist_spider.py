@@ -20,6 +20,8 @@ class DetectoristSpider(scrapy.Spider):
         thread = ThreadItem()
         thread['thread_id'] = to_int(re.findall(self.patterns['thread_id'], response.url)[0])
         thread['thread_name'] = response.xpath('.//meta[@name="twitter:title"]/@content').extract_first()
+        thread['thread_path'] = response.xpath('.//div/table//tr/td/table//tr/td[3]//a/text()').extract()
+        #  response.xpath('html/body/div[1]/div/div/table[1]/tbody/tr/td[1]/table//tr[1]/td[3]//a').extract()
 
         # Scrape all the posts on a page for post & user info
         for post in response.xpath("//table[contains(@id,'post')]"):
