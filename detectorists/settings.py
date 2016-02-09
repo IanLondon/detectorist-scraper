@@ -1,3 +1,4 @@
+import datetime
 # -*- coding: utf-8 -*-
 
 # Scrapy settings for detectorists project
@@ -22,7 +23,7 @@ MONGO_DATABASE = 'detectorists'
 DOWNLOAD_HANDLERS = {'s3': None,}
 
 # logging options
-LOG_FILE = 'detectorist.log'
+LOG_FILE = '%sdetect.log' % (datetime.datetime.now().strftime('%Y_%m_%d__%H_%M'))
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'detectorists (+http://www.yourdomain.com)'
