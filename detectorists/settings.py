@@ -15,6 +15,9 @@ BOT_NAME = 'detectorists'
 SPIDER_MODULES = ['detectorists.spiders']
 NEWSPIDER_MODULE = 'detectorists.spiders'
 
+# Spider persistence
+JOBDIR = 'job_state'
+
 # MongoDB settings
 MONGO_URI = 'mongodb://localhost:27017/'
 MONGO_DATABASE = 'detectorists'
@@ -43,7 +46,7 @@ LOG_FILE = '%sdetect.log' % (datetime.datetime.now().strftime('%Y_%m_%d__%H_%M')
 COOKIES_ENABLED=False
 
 # Disable Telnet Console (enabled by default)
-TELNETCONSOLE_ENABLED=False
+TELNETCONSOLE_ENABLED=True
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {

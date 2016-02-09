@@ -2,3 +2,4 @@
 *.json
 .ipynb_checkpoints/
 *.log
+job_state/*
