@@ -14,11 +14,11 @@ Every post also has a number, which is its order in the thread. This is what I c
 
 ## Get a list of forums on the index page with
 
-    './/td[contains(@id,'f')]/div/a'
+    './/td[contains(@id,"f")]/div/a'
 
 You *could* exclude `<a>`'s with smallfont ancestors b/c they're subforms:
 
-    './/td[contains(@id,'f')]/div/a[not(ancestor::div[@class="smallfont"])]'
+    './/td[contains(@id,"f")]/div/a[not(ancestor::div[@class="smallfont"])]'
 
 But you might as well crawl all the forms from the main page.
 

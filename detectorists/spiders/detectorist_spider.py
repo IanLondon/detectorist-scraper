@@ -8,12 +8,25 @@ from detectorists.items import PostItem, UserItem, ThreadItem
 class DetectoristSpider(scrapy.Spider):
     name = 'detectorist'
     allowed_domains = ['metaldetectingforum.com']
-    start_urls = ["http://metaldetectingforum.com/showthread.php?t=226343"]
+    # start_urls = ["http://metaldetectingforum.com/showthread.php?t=226343"]
+    start_urls = ["http://metaldetectingforum.com"]
 
     # Thread ID 12345 would look like: 'http://example.com/showthread.php?t=12345...'
     patterns = {'thread_id': re.compile('t=(\d+)') }
 
     def parse(self, response):
+        # Parse the board (aka index) for forum URLs
+        forum_urls = response.xpath('.//td[contains(@id,"f")]/div/a/@href').extract()
+        for url in forum_urls:
+            yield scrapy.Request(response.urljoin(url), callback=self.parse_forum)
+
+    def parse_forum(self, response):
+        print "STARTING NEW FORUM SCRAPE (GETTING THREADS)"
+        thread_urls = response.xpath('.//a[contains(@id,"thread_title")]/@href').extract()
+        for url in thread_urls:
+            yield scrapy.Request(response.urljoin(url), callback=self.parse_page)
+
+    def parse_page(self, response):
         print "STARTING NEW PAGE SCRAPE"
 
         # Get info about thread
@@ -55,7 +68,7 @@ class DetectoristSpider(scrapy.Spider):
         if next_page:
             url = response.urljoin(next_page[0].extract())
             print "NEXT PAGE IS: ", url
-            yield scrapy.Request(url, self.parse)
+            yield scrapy.Request(url, self.parse_page)
         else:
             print "NO MORE PAGES FOUND"
 

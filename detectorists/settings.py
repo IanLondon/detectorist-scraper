@@ -21,6 +21,9 @@ MONGO_DATABASE = 'detectorists'
 # fix annoying S3 error message bug
 DOWNLOAD_HANDLERS = {'s3': None,}
 
+# logging options
+LOG_FILE = 'detectorist.log'
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'detectorists (+http://www.yourdomain.com)'
 
