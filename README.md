@@ -1,3 +1,8 @@
+# TODO:
+* Pagination for forums. Try the same next page XPath.
+* Running time logging
+* Error pages (is it the `s=654321` in the URL?)
+
 # vBulletin Forum Taxonomy
 vBulletin forums are arranged like so:
 
