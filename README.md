@@ -1,6 +1,7 @@
 # TODO:
 * Running time logging
 * ERROR pages (is it the `s=654321` in the URL?)
+* Getting a lot of 404s trying to request `example.com/username` ???
 
 # vBulletin Forum Taxonomy
 vBulletin forums are arranged like so:
