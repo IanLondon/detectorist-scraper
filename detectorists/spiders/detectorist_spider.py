@@ -14,11 +14,13 @@ class DetectoristSpider(scrapy.Spider):
 
     # Thread ID 12345 would look like: 'http://example.com/showthread.php?t=12345...'
     patterns = {'thread_id': re.compile('t=(\d+)'),
-    'next_page_url': ".//a[@class='bigusername']//text()" }
+    'next_page_url': "//*[@class='pagenav']//*[@href and contains(text(), '>')]/@href" }
 
     def paginate(self, response, next_page_callback):
         """Returns a scrapy.Request for the next page, or returns None if no next page found.
         response should be the Response object of the current page."""
+        # This gives you the href of the '>' button to go to the next page
+        # There are two identical ones with the same XPath, so just extract_first.
         next_page = response.xpath(self.patterns['next_page_url'])
 
         if next_page:
@@ -28,7 +30,6 @@ class DetectoristSpider(scrapy.Spider):
         else:
             logging.info("NO MORE PAGES FOUND")
             return None
-
 
     def parse(self, response):
         # Parse the board (aka index) for forum URLs
@@ -50,6 +51,7 @@ class DetectoristSpider(scrapy.Spider):
         logging.info("STARTING NEW PAGE SCRAPE")
 
         # Get info about thread
+        # TODO: move this into parse_forum, b/c here the code runs every page of the thread
         thread = ThreadItem()
         thread['thread_id'] = to_int(re.findall(self.patterns['thread_id'], response.url)[0])
         thread['thread_name'] = response.xpath('.//meta[@name="twitter:title"]/@content').extract_first()

@@ -1,6 +1,7 @@
 # TODO:
 * Running time logging
 * ERROR pages (is it the `s=654321` in the URL?)
+* <s>Thread pagination is not actually working!</s> Wow, I had pasted the wrong XPath completely. Now it seems OK.
 * Getting a lot of 404s trying to request `example.com/username` ???
 
 # vBulletin Forum Taxonomy
