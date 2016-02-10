@@ -1,5 +1,6 @@
 *.pyc
 *.json
+*.ipynb
 .ipynb_checkpoints/
 *.log
 job_state/*
